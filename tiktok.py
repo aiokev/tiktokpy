@@ -52,14 +52,14 @@ class TikTok(BaseModel):
     async def get_video_binary(self):
         try:
             async with aiohttp.ClientSession() as session:
-                async with session.get(self.data.play) as video:
+                async with session.get(self.data.play) as video:  # type: ignore
                     binary=await video.read()
             return binary
         except Exception as e:
             print(e)
             
     @classmethod
-    async def get_data(self, url):
+    async def get_data(cls, url):
         async with aiohttp.ClientSession(json_serialize=orjson.loads) as session:
             async with session.get(f"https://tikwm.com/api?url={url}") as f:
-                return self.parse_raw(await f.read())
+                return cls.parse_raw(await f.read())
